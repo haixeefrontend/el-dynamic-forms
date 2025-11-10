@@ -21,6 +21,12 @@
 
     "outDir": "dist",
     "noEmit": true,
+
+    "types": [
+      "vite/client",
+      "./auto-imports.d.ts",
+      "./components.d.ts"
+    ]
   },
   "include": [
     "src/**/*.ts",

@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Vite Plugin Output
+auto-imports.d.ts
+components.d.ts
+.eslintrc-auto-import.json
