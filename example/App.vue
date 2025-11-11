@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { MyComponent } from '../src'
+import { EdfDesigner } from '../src'
 
 defineOptions({
   name: 'App',
 })
+
+const fields = ref([])
 </script>
 
 <template>
   <div>
-    <div>test</div>
+    <div>designer test</div>
     <div>
-      <my-component />
+      <edf-designer v-model="fields" />
     </div>
   </div>
 </template>
