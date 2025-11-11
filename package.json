@@ -30,7 +30,8 @@
     "dev": "vite",
     "build": "vite build",
     "check": "vue-tsc",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepack": "yarn build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "=2.3.1",
