@@ -23,7 +23,7 @@ export default defineConfig({
         copyFileSync('dist/index.d.ts', 'dist/index.d.cts')
       },
     }),
-    unocss(unoConfig),
+    unocss({ ...unoConfig, mode: 'vue-scoped' }),
     AutoImport({
       imports: [
         'vue',
