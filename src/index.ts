@@ -5,7 +5,7 @@ import { default as EdfDesigner } from './designer'
 
 export { EdfDesigner }
 
-export default function install(app: App) {
+export function install(app: App) {
   // Check if Element Plus is installed
   if (!app._context.components.ElButton) {
     app.use(ElementPlus)
@@ -13,3 +13,5 @@ export default function install(app: App) {
   app.component('EdfDesigner', EdfDesigner)
   app.component('EdfDesignerApercu', EdfDesigner.Apercu)
 }
+
+export default install

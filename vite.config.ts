@@ -10,11 +10,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import packageJson from './package.json'
 import unoConfig from './uno.config'
 
-function getPackageName() {
-  const { name } = packageJson
-  return name
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -48,7 +43,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: getPackageName(),
+      name: 'ElDynamicForms',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => {
         switch (format) {
