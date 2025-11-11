@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Plus as ElIconPlus } from '@element-plus/icons-vue'
+
 import { BaseField } from '../types'
 
 defineOptions({
@@ -21,9 +23,14 @@ const props = defineProps<{
       <el-checkbox v-for="option in field.options" :label="option" :key="option">{{ option }}</el-checkbox>
     </el-checkbox-group>
     <el-switch v-else-if="field.type === 'switch'" disabled />
-    <div v-else-if="field.type === 'img'">[图片上传]</div>
-    <div v-else-if="field.type === 'speech'">[语音上传]</div>
-    <div v-else-if="field.type === 'video'">[视频上传]</div>
+    <template v-else-if="field.type === 'img' || field.type === 'speech' || field.type === 'video'">
+      <div class="flex-center flex-col size-20 gap-1 b-1 b-dashed b-#ccc br-2 text-#999 cursor-pointer">
+        <el-icon><el-icon-plus /></el-icon>
+        <span class="text-sm">
+          上传{{ field.type === 'img' ? '图片' : field.type === 'speech' ? '语音' : '视频' }}
+        </span>
+      </div>
+    </template>
   </div>
 </template>
 

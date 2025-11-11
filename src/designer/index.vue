@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ArrowDown as ElIconArrowDown } from '@element-plus/icons-vue'
+
 import Apercu from './apercu.vue'
 
 import type { BaseField } from '../types'
+import type { ElForm } from 'element-plus'
 
 defineOptions({
   name: 'EdfDesigner',

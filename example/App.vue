@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { EdfDesigner } from '../src'
-
 defineOptions({
   name: 'App',
 })

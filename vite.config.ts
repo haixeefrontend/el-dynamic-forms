@@ -39,16 +39,30 @@ export default defineConfig({
       },
     }),
   ],
+  esbuild: {
+    banner: `/*!
+ * ${packageJson.name} v${packageJson.version}
+ * (c) ${new Date().getFullYear()} Haixee Frontend Team
+ */`,
+  },
   build: {
     lib: {
       entry: 'src/index.ts',
       name: getPackageName(),
       formats: ['es', 'cjs', 'umd'],
-      fileName: (format) => `index.${format}.js`,
+      fileName: (format) => {
+        switch (format) {
+          case 'es': return 'index.mjs'
+          case 'cjs': return 'index.cjs'
+          case 'umd': return 'index.umd.js'
+          default: return 'index.js'
+        }
+      },
     },
     rollupOptions: {
       external: ['vue', 'element-plus'],
       output: {
+        exports: 'named',
         globals: {
           vue: 'Vue',
           'element-plus': 'ElementPlus',
