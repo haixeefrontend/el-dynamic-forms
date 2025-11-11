@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 
-import 'uno.css'
+// import 'virtual:uno.css'
 import 'element-plus/theme-chalk/index.css'
+import '../dist/el-dynamic-forms.css'
 
 import src from '../src'
 

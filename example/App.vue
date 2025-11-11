@@ -8,7 +8,8 @@ const fields = ref([])
 
 <template>
   <div>
-    <div>designer test</div>
+    <hr class="my-8" />
+    <div class="mb-4">designer test</div>
     <div>
       <edf-designer v-model="fields" />
     </div>
