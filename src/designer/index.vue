@@ -14,6 +14,12 @@ defineOptions({
   name: 'EdfDesigner',
 })
 
+const props = withDefaults(defineProps<{
+  showButtons: boolean | 'hover'
+}>(), {
+  showButtons: true,
+})
+
 const fields = defineModel({
   type: Array as () => BaseField[],
   default: () => ref([] as BaseField[]),
@@ -74,9 +80,9 @@ const allFieldTypes = [
     <div class="flex flex-col">
       <template v-for="(field, idx) in fields" :key="field.label + field.type">
         <el-form v-if="appendingField?.idx !== idx" label-width="auto" :style="{ order: idx }">
-          <el-form-item class="apercu-line" :label="field.label">
-            <apercu :field="field" class="flex flex-1" />
-            <span class="ml-2 flex gap-2 operation-btns">
+          <el-form-item class="apercu-line" :label="field.label" @dblclick="appendingField = { ...field, idx }">
+            <apercu :field="field" class="flex flex-1 select-none" />
+            <span :class="['ml-2 flex gap-2', showButtons === 'hover' ? 'operation-btns-hover' : !showButtons ? 'hidden' : '']">
               <el-icon color="gray" title="设置" @click="appendingField = { ...field, idx }"><el-icon-gear /></el-icon>
               <el-icon color="red" title="删除"><el-icon-delete /></el-icon>
             </span>
@@ -84,7 +90,7 @@ const allFieldTypes = [
         </el-form>
       </template>
 
-      <el-card v-if="appendingField?.idx" class="my-4 gap-4" :style="{ order: appendingField.idx }">
+      <el-card v-if="typeof appendingField?.idx === 'number'" class="my-4 gap-4" :style="{ order: appendingField.idx }">
         <template #header>
           <span>字段设置</span>
         </template>
@@ -179,11 +185,11 @@ const allFieldTypes = [
 
 <style lang="scss" scoped>
 .apercu-line {
-  .operation-btns {
+  .operation-btns-hover {
     opacity: 0;
     transition: opacity 0.2s;
   }
-  &:hover .operation-btns {
+  &:hover .operation-btns-hover {
     opacity: 1;
   }
 }
