@@ -2,8 +2,6 @@ export type FormItemType = 'input' | 'textarea' | 'radio' | 'checkbox' | 'switch
 
 export interface BaseField {
   type: FormItemType
-  /** 字段名 */
-  name: string
   /** 标签 */
   label: string
   /** 是否必填 */

@@ -17,10 +17,10 @@ const props = defineProps<{
     <el-input v-if="field.type === 'input'" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" disabled />
     <el-input v-else-if="field.type === 'textarea'" type="textarea" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" disabled />
     <el-radio-group v-else-if="field.type === 'radio'" disabled>
-      <el-radio v-for="option in field.options" :label="option" :key="option">{{ option }}</el-radio>
+      <el-radio v-for="option in field.options" :value="option" :key="option">{{ option }}</el-radio>
     </el-radio-group>
     <el-checkbox-group v-else-if="field.type === 'checkbox'" disabled>
-      <el-checkbox v-for="option in field.options" :label="option" :key="option">{{ option }}</el-checkbox>
+      <el-checkbox v-for="option in field.options" :value="option" :key="option">{{ option }}</el-checkbox>
     </el-checkbox-group>
     <el-switch v-else-if="field.type === 'switch'" disabled />
     <template v-else-if="field.type === 'img' || field.type === 'speech' || field.type === 'video'">
