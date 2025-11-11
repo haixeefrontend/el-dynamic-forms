@@ -2,7 +2,7 @@
 
 `el-dynamic-forms` 是一个基于 [Element Plus](https://element-plus.org/) 的动态表单生成库，旨在简化表单的创建和管理过程。通过配置化的方式，用户可以轻松定义复杂的表单结构和验证规则。
 
-## 用法
+## 引用方式
 
 此项目可以通过多种方式引用：
 
@@ -39,3 +39,25 @@ yarn add el-dynamic-forms@file:./external/el-dynamic-forms
 # 或者使用 npm
 npm install el-dynamic-forms@file:./external/el-dynamic-forms
 ```
+
+## 用法
+
+```vue
+<script setup lang="ts">
+import type { BaseField } from 'el-dynamic-forms'
+
+const fields = ref<BaseField[]>([])
+</script>
+
+<template>
+  <edf-designer v-model="fields" />
+</template>
+```
+
+### 组件属性
+
+#### `show-buttons`
+
+- 类型: `boolean | 'hover'`
+- 默认值: `true`
+- 描述: 控制操作按钮的显示方式。`true` 表示始终显示，`false` 表示隐藏，`'hover'` 表示仅在鼠标悬停时显示。
