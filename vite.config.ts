@@ -6,9 +6,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
 import unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
-import ElementPlus from 'unplugin-element-plus/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import Components from 'unplugin-vue-components/vite'
 
 import packageJson from './package.json'
 import unoConfig from './uno.config'
@@ -41,15 +38,6 @@ export default defineConfig({
         enabled: true,
       },
     }),
-    ElementPlus({ defaultLocale: 'zh-cn', useSource: true }),
-    Components({
-      dirs: [],
-      globs: [],
-      resolvers: [
-        ElementPlusResolver({ importStyle: 'sass' }),
-      ],
-      dts: true,
-    }),
   ],
   build: {
     lib: {
@@ -59,10 +47,11 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'element-plus'],
       output: {
         globals: {
           vue: 'Vue',
+          'element-plus': 'ElementPlus',
         },
       },
     },

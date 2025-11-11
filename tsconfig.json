@@ -24,8 +24,7 @@
 
     "types": [
       "vite/client",
-      "./auto-imports.d.ts",
-      "./components.d.ts"
+      "./auto-imports.d.ts"
     ]
   },
   "include": [
