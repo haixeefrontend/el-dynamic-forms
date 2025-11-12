@@ -122,14 +122,12 @@ const allFieldTypes = [
       <el-popover
         :visible="typeof appendingField?.idx === 'number'"
         :virtual-ref="apercuRefs?.[appendingField?.idx!]"
+        title="字段设置"
         placement="bottom"
         width="500"
       >
-        <div>
-          <el-card v-if="typeof appendingField?.idx === 'number'" class="my-4 gap-4 min-h-30">
-            <template #header>
-              <span>字段设置</span>
-            </template>
+        <div class="my-4 gap-4 min-h-30">
+          <template v-if="typeof appendingField?.idx === 'number'">
             <el-form ref="appendingFormRef" :label-width="appendingField ? 'auto' : 100" :rules="appendingFormRules" :model="appendingField">
               <el-form-item prop="label" label="标签名" required>
                 <el-input v-model="appendingField.label" placeholder="标签名" />
@@ -185,7 +183,7 @@ const allFieldTypes = [
                 <el-button @click="appendingField = undefined">取消</el-button>
               </el-form-item>
             </el-form>
-          </el-card>
+          </template>
         </div>
       </el-popover>
     </div>
