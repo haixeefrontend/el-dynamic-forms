@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {
   ArrowDown as ElIconArrowDown,
+  ArrowDownBold as ElIconArrowDownBold,
+  ArrowUpBold as ElIconArrowUpBold,
   Delete as ElIconDelete,
   Setting as ElIconGear,
 } from '@element-plus/icons-vue'
@@ -15,7 +17,7 @@ defineOptions({
 })
 
 const props = withDefaults(defineProps<{
-  showButtons: boolean | 'hover'
+  showButtons?: boolean | 'hover'
 }>(), {
   showButtons: true,
 })
@@ -44,6 +46,7 @@ const appendingFormRules = {
   ],
 }
 const appendingFormRef = ref<InstanceType<typeof ElForm> | null>(null)
+const apercuRefs = useTemplateRef<InstanceType<typeof Apercu>[]>('apercu')
 async function saveAppending() {
   const nf = appendingField.value
   if (!nf) return
@@ -78,84 +81,113 @@ const allFieldTypes = [
 <template>
   <div>
     <div class="flex flex-col">
-      <template v-for="(field, idx) in fields" :key="field.label + field.type">
-        <el-form v-if="appendingField?.idx !== idx" label-width="auto" :style="{ order: idx }">
-          <el-form-item class="apercu-line" :label="field.label" @dblclick="appendingField = { ...field, idx }">
-            <apercu :field="field" class="flex flex-1 select-none" />
-            <span :class="['ml-2 flex gap-2', showButtons === 'hover' ? 'operation-btns-hover' : !showButtons ? 'hidden' : '']">
-              <el-icon color="gray" title="设置" @click="appendingField = { ...field, idx }"><el-icon-gear /></el-icon>
-              <el-icon color="red" title="删除"><el-icon-delete /></el-icon>
+      <el-form label-width="auto">
+        <template v-for="(field, idx) in fields" :key="field.label + field.type">
+          <el-form-item
+            class="apercu-line"
+            :label="appendingField?.idx === idx ? appendingField.label : field.label"
+            :required="appendingField?.idx === idx ? appendingField.is_require : field.is_require"
+            :style="{ order: idx }"
+            @dblclick="appendingField = { ...field, idx, hasDefault: field.default_value !== undefined }"
+          >
+            <apercu ref="apercu" :field="appendingField?.idx === idx ? appendingField : field" class="flex flex-1 select-none" />
+            <span :class="['ml-2 flex gap-4', showButtons === 'hover' ? 'operation-btns-hover' : !showButtons ? 'hidden' : '']">
+              <el-icon
+                :color="idx === 0 ? 'lightgray' : 'gray'"
+                title="上移"
+                @click="idx > 0 && fields.splice(idx - 1, 0, fields.splice(idx, 1)[0])"
+              >
+                <el-icon-arrow-up-bold />
+              </el-icon>
+              <el-icon
+                :color="idx === fields.length - 1 ? 'lightgray' : 'gray'"
+                title="下移"
+                @click="idx < fields.length - 1 && fields.splice(idx + 1, 0, fields.splice(idx, 1)[0])"
+              >
+                <el-icon-arrow-down-bold />
+              </el-icon>
+              <el-icon
+                color="gray"
+                title="设置"
+                @click="appendingField = { ...field, idx, hasDefault: field.default_value !== undefined }"
+              >
+                <el-icon-gear />
+              </el-icon>
+              <el-icon color="red" title="删除" @click="fields.splice(idx, 1)"><el-icon-delete /></el-icon>
             </span>
           </el-form-item>
-        </el-form>
-      </template>
-
-      <el-card v-if="typeof appendingField?.idx === 'number'" class="my-4 gap-4" :style="{ order: appendingField.idx }">
-        <template #header>
-          <span>字段设置</span>
         </template>
-        <el-form ref="appendingFormRef" label-width="auto" :rules="appendingFormRules" :model="appendingField">
-          <div>
-            <el-form-item class="shadow py-4 pr-6" :label="appendingField.label || ' '" size="large">
-              <apercu :field="appendingField" class="flex flex-1" />
-            </el-form-item>
-          </div>
-          <el-form-item prop="label" label="标签名" required>
-            <el-input v-model="appendingField.label" placeholder="标签名" size="small" />
-          </el-form-item>
-          <template v-if="appendingField.type === 'input' || appendingField.type === 'textarea'">
-            <el-form-item prop="placeholder" label="占位符">
-              <el-input v-model="appendingField.placeholder" placeholder="占位符" size="small" />
-            </el-form-item>
-          </template>
-          <template v-if="appendingField.type === 'radio' || appendingField.type === 'checkbox'">
-            <el-form-item prop="options" label="选项" required>
-              <el-tag
-                v-for="option in appendingField.options"
-                :key="option"
-                class="mr-1 mb-1"
-                closable
-                @close="() => {
-                  if (!appendingField?.options) return
-                  appendingField.options = appendingField.options?.filter((opt) => opt !== option)
-                }"
-              >
-                {{ option }}
-              </el-tag>
-              <el-input v-model="appendingField.newOption" placeholder="新选项" size="small" class="my-2">
-                <template #append>
-                  <el-button
-                    size="small"
-                    @click="
-                      () => {
-                        if (!appendingField?.newOption) return
-                        if (appendingField.newOption.trim() !== '') {
-                          appendingField.options ??= []
-                          appendingField.options.push(appendingField.newOption.trim())
-                          appendingField.newOption = ''
-                        }
-                      }
-                    "
+      </el-form>
+
+      <el-popover
+        :visible="typeof appendingField?.idx === 'number'"
+        :virtual-ref="apercuRefs?.[appendingField?.idx!]"
+        placement="bottom"
+        width="500"
+      >
+        <div>
+          <el-card v-if="typeof appendingField?.idx === 'number'" class="my-4 gap-4 min-h-30">
+            <template #header>
+              <span>字段设置</span>
+            </template>
+            <el-form ref="appendingFormRef" :label-width="appendingField ? 'auto' : 100" :rules="appendingFormRules" :model="appendingField">
+              <el-form-item prop="label" label="标签名" required>
+                <el-input v-model="appendingField.label" placeholder="标签名" />
+              </el-form-item>
+              <template v-if="appendingField.type === 'input' || appendingField.type === 'textarea'">
+                <el-form-item prop="placeholder" label="占位符">
+                  <el-input v-model="appendingField.placeholder" placeholder="占位符" />
+                </el-form-item>
+              </template>
+              <template v-if="appendingField.type === 'radio' || appendingField.type === 'checkbox'">
+                <el-form-item prop="options" label="选项" required>
+                  <el-tag
+                    v-for="option in appendingField.options"
+                    :key="option"
+                    class="mr-1 mb-1"
+                    closable
+                    @close="() => {
+                      if (!appendingField?.options) return
+                      appendingField.options = appendingField.options?.filter((opt) => opt !== option)
+                    }"
                   >
-                    添加
-                  </el-button>
-                </template>
-              </el-input>
-            </el-form-item>
-          </template>
-          <el-form-item prop="default_value" label="默认值">
-            <el-checkbox v-model="appendingField.hasDefault" />
-            <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值" size="small" />
-          </el-form-item>
-          <el-form-item prop="is_require" label="必填">
-            <el-checkbox v-model="appendingField.is_require" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="saveAppending">保存</el-button>
-            <el-button @click="appendingField = undefined">取消</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
+                    {{ option }}
+                  </el-tag>
+                  <el-input v-model="appendingField.newOption" placeholder="新选项" class="my-2">
+                    <template #append>
+                      <el-button
+                        @click="
+                          () => {
+                            if (!appendingField?.newOption) return
+                            if (appendingField.newOption.trim() !== '') {
+                              appendingField.options ??= []
+                              appendingField.options.push(appendingField.newOption.trim())
+                              appendingField.newOption = ''
+                            }
+                          }
+                        "
+                      >
+                        添加
+                      </el-button>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </template>
+              <el-form-item prop="default_value" label="默认值">
+                <el-checkbox v-model="appendingField.hasDefault" />
+                <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值" />
+              </el-form-item>
+              <el-form-item prop="is_require" label="必填">
+                <el-checkbox v-model="appendingField.is_require" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="saveAppending">保存</el-button>
+                <el-button @click="appendingField = undefined">取消</el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </div>
+      </el-popover>
     </div>
 
     <el-dropdown trigger="click" placement="bottom">
