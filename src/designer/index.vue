@@ -183,10 +183,10 @@ const allFieldTypes = [
                 <template v-else-if="appendingField.type === 'select' || appendingField.type === 'radio' || appendingField.type === 'checkbox'">
                   <el-select
                     v-show="appendingField.hasDefault"
-                    :model-value="appendingField.type === 'checkbox' ? (appendingField.default_value?.split(';') || []) : appendingField.default_value"
+                    :model-value="appendingField.type === 'checkbox' ? (appendingField.default_value?.split(',') || []) : appendingField.default_value"
                     @update:model-value="(val) => {
                       if (!appendingField) return
-                      appendingField.default_value = appendingField.type === 'checkbox' ? val.join(';') : val
+                      appendingField.default_value = appendingField.type === 'checkbox' ? val.join(',') : val
                     }"
                     placeholder="默认值"
                     :multiple="appendingField.type === 'checkbox'"
