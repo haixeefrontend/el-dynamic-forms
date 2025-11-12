@@ -94,6 +94,7 @@ const allFieldTypes = [
             <apercu ref="apercu" :field="appendingField?.idx === idx ? appendingField : field" class="flex flex-1 select-none" />
             <span :class="['ml-2 flex gap-4', showButtons === 'hover' ? 'operation-btns-hover' : !showButtons ? 'hidden' : '']">
               <el-icon
+                class="cursor-pointer"
                 :color="idx === 0 ? 'lightgray' : 'gray'"
                 title="上移"
                 @click="idx > 0 && fields.splice(idx - 1, 0, fields.splice(idx, 1)[0])"
@@ -101,6 +102,7 @@ const allFieldTypes = [
                 <el-icon-arrow-up-bold />
               </el-icon>
               <el-icon
+                class="cursor-pointer"
                 :color="idx === fields.length - 1 ? 'lightgray' : 'gray'"
                 title="下移"
                 @click="idx < fields.length - 1 && fields.splice(idx + 1, 0, fields.splice(idx, 1)[0])"
@@ -108,13 +110,14 @@ const allFieldTypes = [
                 <el-icon-arrow-down-bold />
               </el-icon>
               <el-icon
+                class="cursor-pointer"
                 color="gray"
                 title="设置"
                 @click="appendingField = { ...field, idx, hasDefault: field.default_value !== undefined }"
               >
                 <el-icon-gear />
               </el-icon>
-              <el-icon color="red" title="删除" @click="fields.splice(idx, 1)"><el-icon-delete /></el-icon>
+              <el-icon color="red" title="删除" class="cursor-pointer" @click="fields.splice(idx, 1)"><el-icon-delete /></el-icon>
             </span>
           </el-form-item>
         </template>
