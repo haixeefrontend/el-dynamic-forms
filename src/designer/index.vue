@@ -69,6 +69,7 @@ async function saveAppending() {
 const allFieldTypes = [
   { value: 'input', label: '输入框' },
   { value: 'textarea', label: '多行输入框' },
+  { value: 'select', label: '下拉框' },
   { value: 'radio', label: '单选框' },
   { value: 'checkbox', label: '多选框' },
   { value: 'switch', label: '开关' },
@@ -137,7 +138,7 @@ const allFieldTypes = [
                   <el-input v-model="appendingField.placeholder" placeholder="占位符" />
                 </el-form-item>
               </template>
-              <template v-if="appendingField.type === 'radio' || appendingField.type === 'checkbox'">
+              <template v-if="appendingField.type === 'radio' || appendingField.type === 'checkbox' || appendingField.type === 'select'">
                 <el-form-item prop="options" label="选项" required>
                   <el-tag
                     v-for="option in appendingField.options"

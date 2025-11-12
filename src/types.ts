@@ -1,4 +1,4 @@
-export type FormItemType = 'input' | 'textarea' | 'radio' | 'checkbox' | 'switch' | 'img' | 'speech' | 'video'
+export type FormItemType = 'input' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'switch' | 'img' | 'speech' | 'video'
 
 export interface BaseField {
   type: FormItemType

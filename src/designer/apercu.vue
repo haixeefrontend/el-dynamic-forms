@@ -14,15 +14,18 @@ const props = defineProps<{
 
 <template>
   <div>
-    <el-input v-if="field.type === 'input'" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" disabled />
-    <el-input v-else-if="field.type === 'textarea'" type="textarea" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" disabled />
-    <el-radio-group v-else-if="field.type === 'radio'" disabled>
+    <el-input v-if="field.type === 'input'" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" />
+    <el-input v-else-if="field.type === 'textarea'" type="textarea" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''" />
+    <el-select v-else-if="field.type === 'select'" :placeholder="field.placeholder" :model-value="field.hasDefault ? field.default_value : ''">
+      <el-option v-for="option in field.options" :key="option" :label="option" :value="option" />
+    </el-select>
+    <el-radio-group v-else-if="field.type === 'radio'">
       <el-radio v-for="option in field.options" :value="option" :key="option">{{ option }}</el-radio>
     </el-radio-group>
-    <el-checkbox-group v-else-if="field.type === 'checkbox'" disabled>
+    <el-checkbox-group v-else-if="field.type === 'checkbox'">
       <el-checkbox v-for="option in field.options" :value="option" :key="option">{{ option }}</el-checkbox>
     </el-checkbox-group>
-    <el-switch v-else-if="field.type === 'switch'" disabled />
+    <el-switch v-else-if="field.type === 'switch'" />
     <template v-else-if="field.type === 'img' || field.type === 'speech' || field.type === 'video'">
       <div class="flex-center flex-col size-20 gap-1 b-1 b-dashed b-#ccc br-2 text-#999 cursor-pointer">
         <el-icon><el-icon-plus /></el-icon>
