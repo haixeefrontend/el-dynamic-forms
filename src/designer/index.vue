@@ -7,9 +7,11 @@ import {
   Setting as ElIconGear,
 } from '@element-plus/icons-vue'
 
+import { useLocale } from '../locales'
+
 import Apercu from './apercu.vue'
 
-import type { BaseField } from '../types'
+import type { BaseField, FormItemType } from '../types'
 import type { ElForm } from 'element-plus'
 
 defineOptions({
@@ -22,6 +24,8 @@ const props = withDefaults(defineProps<{
   showButtons: true,
 })
 
+const { t } = useLocale()
+
 const fields = defineModel({
   type: Array as () => BaseField[],
   default: () => ref([] as BaseField[]),
@@ -29,14 +33,13 @@ const fields = defineModel({
 
 const appendingField = ref<BaseField & { idx: number, hasDefault?: boolean, newOption?: string }>()
 const appendingFormRules = {
-  name: [{ required: true, message: '字段名称不能为空', trigger: 'blur' }],
-  label: [{ required: true, message: '标签名不能为空', trigger: 'blur' }],
+  label: [{ required: true, message: t('edf.designer.formRules.nameCannotBe'), trigger: 'blur' }],
   options: [
     {
       validator: (rule: any, value: string[]) => {
         if (appendingField.value?.type === 'radio' || appendingField.value?.type === 'checkbox') {
           if (!value || value.length === 0) {
-            return new Error('选项不能为空')
+            return new Error(t('edf.designer.formRules.optionsCannotBeEmpty'))
           }
         }
         return true
@@ -66,17 +69,17 @@ async function saveAppending() {
   appendingField.value = undefined
 }
 
-const allFieldTypes = [
-  { value: 'input', label: '输入框' },
-  { value: 'textarea', label: '多行输入框' },
-  { value: 'select', label: '下拉框' },
-  { value: 'radio', label: '单选框' },
-  { value: 'checkbox', label: '多选框' },
-  { value: 'switch', label: '开关' },
-  { value: 'img', label: '图片上传' },
-  { value: 'speech', label: '语音上传' },
-  { value: 'video', label: '视频上传' },
-] as const
+const allFieldTypes: { value: FormItemType, label: string }[] = ([
+  'input',
+  'textarea',
+  'select',
+  'radio',
+  'checkbox',
+  'switch',
+  'img',
+  'speech',
+  'video',
+] as const).map((type) => ({ value: type, label: t(`edf.designer.items.${type}`) }))
 </script>
 
 <template>
@@ -96,7 +99,7 @@ const allFieldTypes = [
               <el-icon
                 class="cursor-pointer"
                 :color="idx === 0 ? 'lightgray' : 'gray'"
-                title="上移"
+                :title="t('edf.designer.ui.moveUp')"
                 @click="idx > 0 && fields.splice(idx - 1, 0, fields.splice(idx, 1)[0])"
               >
                 <el-icon-arrow-up-bold />
@@ -104,7 +107,7 @@ const allFieldTypes = [
               <el-icon
                 class="cursor-pointer"
                 :color="idx === fields.length - 1 ? 'lightgray' : 'gray'"
-                title="下移"
+                :title="t('edf.designer.ui.moveDown')"
                 @click="idx < fields.length - 1 && fields.splice(idx + 1, 0, fields.splice(idx, 1)[0])"
               >
                 <el-icon-arrow-down-bold />
@@ -112,12 +115,18 @@ const allFieldTypes = [
               <el-icon
                 class="cursor-pointer"
                 color="gray"
-                title="设置"
+                :title="t('edf.designer.ui.settings')"
                 @click="appendingField = { ...field, idx, hasDefault: field.default_value !== undefined }"
               >
                 <el-icon-gear />
               </el-icon>
-              <el-icon color="red" title="删除" class="cursor-pointer" @click="fields.splice(idx, 1)"><el-icon-delete /></el-icon>
+              <el-icon
+                color="red"
+                :title="t('edf.designer.ui.delete')" class="cursor-pointer"
+                @click="fields.splice(idx, 1)"
+              >
+                <el-icon-delete />
+              </el-icon>
             </span>
           </el-form-item>
         </template>
@@ -126,23 +135,23 @@ const allFieldTypes = [
       <el-popover
         :visible="typeof appendingField?.idx === 'number'"
         :virtual-ref="apercuRefs?.[appendingField?.idx!]"
-        title="字段设置"
+        :title="t('edf.designer.ui.fieldSettings')"
         placement="bottom"
         width="500"
       >
         <div class="my-4 gap-4 min-h-30">
           <template v-if="typeof appendingField?.idx === 'number'">
             <el-form ref="appendingFormRef" :label-width="appendingField ? 'auto' : 100" :rules="appendingFormRules" :model="appendingField">
-              <el-form-item prop="label" label="标签名" required>
-                <el-input v-model="appendingField.label" placeholder="标签名" />
+              <el-form-item prop="label" :label="t('edf.designer.ui.labelName')" required>
+                <el-input v-model="appendingField.label" :placeholder="t('edf.designer.ui.labelName')" />
               </el-form-item>
               <template v-if="appendingField.type === 'input' || appendingField.type === 'textarea'">
-                <el-form-item prop="placeholder" label="占位符">
-                  <el-input v-model="appendingField.placeholder" placeholder="占位符" />
+                <el-form-item prop="placeholder" :label="t('edf.designer.ui.placeholder')">
+                  <el-input v-model="appendingField.placeholder" :placeholder="t('edf.designer.ui.placeholder')" />
                 </el-form-item>
               </template>
               <template v-if="appendingField.type === 'radio' || appendingField.type === 'checkbox' || appendingField.type === 'select'">
-                <el-form-item prop="options" label="选项" required>
+                <el-form-item prop="options" :label="t('edf.designer.ui.options')" required>
                   <el-tag
                     v-for="option in appendingField.options"
                     :key="option"
@@ -155,7 +164,7 @@ const allFieldTypes = [
                   >
                     {{ option }}
                   </el-tag>
-                  <el-input v-model="appendingField.newOption" placeholder="新选项" class="my-2">
+                  <el-input v-model="appendingField.newOption" :placeholder="t('edf.designer.ui.newOption')" class="my-2">
                     <template #append>
                       <el-button
                         @click="
@@ -169,16 +178,16 @@ const allFieldTypes = [
                           }
                         "
                       >
-                        添加
+                        {{ t('edf.designer.ui.add') }}
                       </el-button>
                     </template>
                   </el-input>
                 </el-form-item>
               </template>
-              <el-form-item prop="default_value" label="默认值">
+              <el-form-item prop="default_value" :label="t('edf.designer.ui.defaultValue')">
                 <el-checkbox v-model="appendingField.hasDefault" />
                 <template v-if="appendingField.type === 'input' || appendingField.type === 'textarea'">
-                  <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值" />
+                  <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" :placeholder="t('edf.designer.ui.defaultValue')" />
                 </template>
                 <template v-else-if="appendingField.type === 'select' || appendingField.type === 'radio' || appendingField.type === 'checkbox'">
                   <el-select
@@ -188,25 +197,25 @@ const allFieldTypes = [
                       if (!appendingField) return
                       appendingField.default_value = appendingField.type === 'checkbox' ? val.join(',') : val
                     }"
-                    placeholder="默认值"
+                    :placeholder="t('edf.designer.ui.defaultValue')"
                     :multiple="appendingField.type === 'checkbox'"
                   >
                     <el-option v-for="option in appendingField.options" :key="option" :label="option" :value="option" />
                   </el-select>
                 </template>
                 <template v-else-if="appendingField.type === 'switch'">
-                  <el-select v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值">
-                    <el-option label="打开" :value="true" />
-                    <el-option label="关闭" :value="false" />
+                  <el-select v-show="appendingField.hasDefault" v-model="appendingField.default_value" :placeholder="t('edf.designer.ui.defaultValue')">
+                    <el-option :label="t('edf.designer.ui.open')" :value="true" />
+                    <el-option :label="t('edf.designer.ui.close')" :value="false" />
                   </el-select>
                 </template>
               </el-form-item>
-              <el-form-item prop="is_require" label="必填">
+              <el-form-item prop="is_require" :label="t('edf.designer.ui.required')">
                 <el-checkbox v-model="appendingField.is_require" />
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="saveAppending">保存</el-button>
-                <el-button @click="appendingField = undefined">取消</el-button>
+                <el-button type="primary" @click="saveAppending">{{ t('edf.designer.ui.save') }}</el-button>
+                <el-button @click="appendingField = undefined">{{ t('edf.designer.ui.cancel') }}</el-button>
               </el-form-item>
             </el-form>
           </template>
@@ -226,7 +235,7 @@ const allFieldTypes = [
                 type: type,
                 placeholder: '',
                 is_require: false,
-                options: type === 'radio' || type === 'checkbox' ? ['选项1', '选项2'] : undefined,
+                options: type === 'radio' || type === 'checkbox' ? [t('edf.designer.ui.option1'), t('edf.designer.ui.option2')] : undefined,
               })
             }"
           >
@@ -234,7 +243,10 @@ const allFieldTypes = [
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
-      <el-button>添加字段<el-icon class="el-icon--right"><el-icon-arrow-down /></el-icon></el-button>
+      <el-button>
+        {{ t('edf.designer.ui.appendField') }}
+        <el-icon class="el-icon--right"><el-icon-arrow-down /></el-icon>
+      </el-button>
     </el-dropdown>
   </div>
 </template>

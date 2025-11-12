@@ -54,7 +54,39 @@ const fields = ref<BaseField[]>([])
 </template>
 ```
 
+### 国际化支持
+
+`el-dynamic-forms` 通过 Element Plus 的国际化接口 useLocale 提供多语言支持。请确保在应用中正确配置 Element Plus 的国际化设置，以便 `el-dynamic-forms` 能够显示相应的语言内容。
+
+要覆盖默认的翻译文本，可以在安装 `el-dynamic-forms` 时传入自定义的语言包：
+
+```ts
+import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn' // 引入 Element Plus 中文包
+import ElDynamicForms from 'el-dynamic-forms'
+
+createApp(App)
+  .use(ElementPlus, { locale: zhCn }) // 配置 Element Plus 语言
+  .use(ElDynamicForms, {
+    locales: {
+      'zh-cn': {
+        'edf.designer.ui.appendField': '添加字段自定义',
+        // ^ 注意这里是点号分隔的路径
+        // 其他可以覆盖的文本可以参考 TypeScript 类型或者 src/locales 目录下的文件
+      },
+    },
+  })
+  .mount('#app')
+```
+
 ### 组件属性
+
+#### `v-model / modelValue`
+
+- 类型: `BaseField[]`
+- 默认值: `[]`
+- 描述: 用于绑定和管理表单字段的数组。未定义时组件无法正常运行。
 
 #### `show-buttons`
 

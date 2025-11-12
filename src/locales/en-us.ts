@@ -1,0 +1,47 @@
+export default {
+  edf: {
+    designer: {
+      items: {
+        input: 'Input Box',
+        textarea: 'Textarea',
+        radio: 'Radio Button',
+        checkbox: 'Checkbox',
+        select: 'Select',
+        switch: 'Switch',
+        img: 'Image Upload',
+        speech: 'Speech Upload',
+        video: 'Video Upload',
+      },
+      formRules: {
+        labelCannotBeEmpty: 'Label name cannot be empty',
+        optionsCannotBeEmpty: 'Options cannot be empty',
+      },
+      ui: {
+        add: 'Add',
+        open: 'Open',
+        close: 'Close',
+        moveUp: 'Move Up',
+        moveDown: 'Move Down',
+        delete: 'Delete',
+        settings: 'Settings',
+        fieldSettings: 'Field Settings',
+        labelName: 'Label Name',
+        placeholder: 'Placeholder',
+        defaultValue: 'Default Value',
+        options: 'Options',
+        option1: 'Option 1',
+        option2: 'Option 2',
+        newOption: 'New Option',
+        required: 'Required',
+        save: 'Save',
+        cancel: 'Cancel',
+        appendField: 'Add Field',
+        upload: {
+          img: 'Upload Image',
+          video: 'Upload Video',
+          speech: 'Upload Speech',
+        },
+      },
+    },
+  },
+}

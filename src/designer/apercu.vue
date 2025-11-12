@@ -2,6 +2,7 @@
 import { Plus as ElIconPlus } from '@element-plus/icons-vue'
 
 import { BaseField } from '../types'
+import { useLocale } from '../locales';
 
 defineOptions({
   name: 'Apercu',
@@ -10,6 +11,8 @@ defineOptions({
 const props = defineProps<{
   field: BaseField & { hasDefault?: boolean }
 }>()
+
+const { t } = useLocale()
 
 function defaults(otherwise: any, transformer: (v: any) => any = (v) => v) {
   if (props.field.hasDefault !== false) {
@@ -37,7 +40,7 @@ function defaults(otherwise: any, transformer: (v: any) => any = (v) => v) {
       <div class="flex-center flex-col size-20 gap-1 b-1 b-dashed b-#ccc br-2 text-#999 cursor-pointer">
         <el-icon><el-icon-plus /></el-icon>
         <span class="text-sm">
-          上传{{ field.type === 'img' ? '图片' : field.type === 'speech' ? '语音' : '视频' }}
+          {{ t(`edf.designer.ui.upload.${field.type}`) }}
         </span>
       </div>
     </template>

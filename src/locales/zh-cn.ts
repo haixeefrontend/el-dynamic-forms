@@ -1,0 +1,47 @@
+export default {
+  edf: {
+    designer: {
+      items: {
+        input: '输入框',
+        textarea: '多行输入框',
+        radio: '单选框',
+        checkbox: '多选框',
+        select: '下拉框',
+        switch: '开关',
+        img: '图片上传',
+        speech: '语音上传',
+        video: '视频上传',
+      },
+      formRules: {
+        labelCannotBeEmpty: '标签名不能为空',
+        optionsCannotBeEmpty: '选项不能为空',
+      },
+      ui: {
+        add: '添加',
+        open: '打开',
+        close: '关闭',
+        moveUp: '上移',
+        moveDown: '下移',
+        delete: '删除',
+        settings: '设置',
+        fieldSettings: '字段设置',
+        labelName: '标签名',
+        placeholder: '占位提示',
+        defaultValue: '默认值',
+        options: '选项',
+        option1: '选项1',
+        option2: '选项2',
+        newOption: '新建选项',
+        required: '必填',
+        save: '保存',
+        cancel: '取消',
+        appendField: '添加字段',
+        upload: {
+          img: '上传图片',
+          video: '上传视频',
+          speech: '上传语音',
+        },
+      },
+    },
+  },
+}

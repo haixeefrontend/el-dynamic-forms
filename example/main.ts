@@ -10,4 +10,13 @@ import src from '../src'
 
 import App from './App.vue'
 
-createApp(App).use(ElementPlus, { locale: zhCn }).use(src).mount('#app')
+createApp(App)
+  .use(ElementPlus, { locale: zhCn })
+  .use(src, {
+    locales: {
+      'zh-cn': {
+        'edf.designer.ui.appendField': '添加字段自定义',
+      },
+    },
+  })
+  .mount('#app')
