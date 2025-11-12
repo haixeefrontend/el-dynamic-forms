@@ -174,7 +174,29 @@ const allFieldTypes = [
               </template>
               <el-form-item prop="default_value" label="默认值">
                 <el-checkbox v-model="appendingField.hasDefault" />
-                <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值" />
+                <template v-if="appendingField.type === 'input' || appendingField.type === 'textarea'">
+                  <el-input v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值" />
+                </template>
+                <template v-else-if="appendingField.type === 'select' || appendingField.type === 'radio' || appendingField.type === 'checkbox'">
+                  <el-select
+                    v-show="appendingField.hasDefault"
+                    :model-value="appendingField.type === 'checkbox' ? (appendingField.default_value?.split(';') || []) : appendingField.default_value"
+                    @update:model-value="(val) => {
+                      if (!appendingField) return
+                      appendingField.default_value = appendingField.type === 'checkbox' ? val.join(';') : val
+                    }"
+                    placeholder="默认值"
+                    :multiple="appendingField.type === 'checkbox'"
+                  >
+                    <el-option v-for="option in appendingField.options" :key="option" :label="option" :value="option" />
+                  </el-select>
+                </template>
+                <template v-else-if="appendingField.type === 'switch'">
+                  <el-select v-show="appendingField.hasDefault" v-model="appendingField.default_value" placeholder="默认值">
+                    <el-option label="打开" :value="true" />
+                    <el-option label="关闭" :value="false" />
+                  </el-select>
+                </template>
               </el-form-item>
               <el-form-item prop="is_require" label="必填">
                 <el-checkbox v-model="appendingField.is_require" />
