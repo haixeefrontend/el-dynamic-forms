@@ -1,3 +1,5 @@
+import ElementPlus from 'element-plus'
+import { zhCn } from 'element-plus/es/locale/index.mjs'
 import { createApp } from 'vue'
 
 // import 'virtual:uno.css'
@@ -8,4 +10,4 @@ import src from '../src'
 
 import App from './App.vue'
 
-createApp(App).use(src).mount('#app')
+createApp(App).use(ElementPlus, { locale: zhCn }).use(src).mount('#app')
