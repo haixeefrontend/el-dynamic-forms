@@ -135,13 +135,14 @@ const allFieldTypes: { value: FormItemType, label: string }[] = ([
       <el-popover
         :visible="typeof appendingField?.idx === 'number'"
         :virtual-ref="apercuRefs?.[appendingField?.idx!]"
+        virtual-triggering
         :title="t('edf.designer.ui.fieldSettings')"
         placement="bottom"
         width="500"
       >
         <div class="my-4 gap-4 min-h-30">
           <template v-if="typeof appendingField?.idx === 'number'">
-            <el-form ref="appendingFormRef" :label-width="appendingField ? 'auto' : 100" :rules="appendingFormRules" :model="appendingField">
+            <el-form ref="appendingFormRef" label-width="auto" :rules="appendingFormRules" :model="appendingField">
               <el-form-item prop="label" :label="t('edf.designer.ui.labelName')" required>
                 <el-input v-model="appendingField.label" :placeholder="t('edf.designer.ui.labelName')" />
               </el-form-item>
