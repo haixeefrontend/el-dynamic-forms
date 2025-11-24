@@ -32,7 +32,7 @@ function defaults(otherwise: any, transformer: (v: any) => any = (v) => v) {
     <el-radio-group v-else-if="field.type === 'radio'" :model-value="defaults(null)">
       <el-radio v-for="option in field.options" :value="option" :key="option">{{ option }}</el-radio>
     </el-radio-group>
-    <el-checkbox-group v-else-if="field.type === 'checkbox'" :model-value="defaults([], (v) => (v ? v.split(',') : []))">
+    <el-checkbox-group v-else-if="field.type === 'checkbox'" :model-value="defaults([])">
       <el-checkbox v-for="option in field.options" :value="option" :key="option">{{ option }}</el-checkbox>
     </el-checkbox-group>
     <el-switch v-else-if="field.type === 'switch'" :model-value="defaults(false)" />
